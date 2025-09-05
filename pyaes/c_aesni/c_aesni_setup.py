@@ -4,12 +4,16 @@ Setup script for building the optimized AES-CTR C extension.
 """
 
 from setuptools import setup, Extension
+from pathlib import Path
+
+HERE = Path(__file__).parent.resolve()
+SRC = str(HERE / "c_aesni.c")
 
 # Define the extension
 extensions = [
     Extension(
         "c_aesni",
-        ["c_aesni.c"],
+        [SRC],
         extra_compile_args=[
             "-march=native",  # Enable all CPU features
             "-maes",          # Enable AES-NI
