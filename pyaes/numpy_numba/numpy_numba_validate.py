@@ -1,8 +1,13 @@
 #!/usr/bin/env python3
+"""
+NumPy+Numba AES-CTR validation — streamlined to only tests 6 and 6b.
+Mirrors the concise style of the PyCryptodome validator but validates the
+NumPy+Numba implementation as the source of truth.
+"""
+
 import pyaes
 
-# Import implementation and constants directly from the benchmark module
-from PyperformancBenchmarkOptimization.pyaes.numpy_numba.numpy_numba_runbenchmark import (
+from numpy_numba_runbenchmark import (
     aes_ctr_numba_parallel,
     CLEARTEXT,
     KEY,
