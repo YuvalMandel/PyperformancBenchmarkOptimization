@@ -1,23 +1,17 @@
 #!/usr/bin/env python3
-"""
-AES-CTR encryption/decryption for flamegraph profiling (NumPy + Numba).
-Runs 1000 times to produce richer samples for py-spy/perf.
-"""
-
-from parallel_numpy_crypto_flamegraph_profile import (
-    do_encrypt_numpy,
-    do_decrypt_numpy,
+from numpy_numba_runbenchmark import (
+    aes_ctr_numba,
     CLEARTEXT,
     KEY,
 )
 
 # Warm up JIT compilation once on import-sized data
-_ = do_encrypt_numpy(KEY, CLEARTEXT[:16], 0)
+_ = aes_ctr_numba(KEY, CLEARTEXT[:16], 0)
 
 
 def main():
-    ciphertext = do_encrypt_numpy(KEY, CLEARTEXT, 0)
-    plaintext = do_decrypt_numpy(KEY, ciphertext, 0)
+    ciphertext = aes_ctr_numba(KEY, CLEARTEXT, 0)
+    plaintext = aes_ctr_numba(KEY, ciphertext, 0)
     if plaintext != CLEARTEXT:
         raise RuntimeError("Encryption/decryption failed!")
 

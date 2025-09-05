@@ -2,7 +2,7 @@
 import pyaes
 
 from numpy_numba_runbenchmark import (
-    aes_ctr_numba_parallel,
+    aes_ctr_numba,
     CLEARTEXT,
     KEY,
     BLOCK_SIZE,
@@ -14,8 +14,8 @@ def validate_aes_implementation():
 
     # Test: Main script test data validation
     print(f"Testing with main script data: {len(CLEARTEXT)} bytes, block size: {BLOCK_SIZE}")
-    ct6 = aes_ctr_numba_parallel(KEY, CLEARTEXT, 0)
-    pt6 = aes_ctr_numba_parallel(KEY, ct6, 0)
+    ct6 = aes_ctr_numba(KEY, CLEARTEXT, 0)
+    pt6 = aes_ctr_numba(KEY, ct6, 0)
     if pt6 != CLEARTEXT:
         raise RuntimeError("AES CTR main script data test failed")
     print("\u2713 Main script data test passed")
@@ -24,7 +24,7 @@ def validate_aes_implementation():
     print("Comparing main script data with pyaes using counter=1 (pyaes alignment)...")
     aes_pyaes_main = pyaes.AESModeOfOperationCTR(KEY)
     ct_pyaes_main = aes_pyaes_main.encrypt(CLEARTEXT)
-    ct_ours_main = aes_ctr_numba_parallel(KEY, CLEARTEXT, 1)
+    ct_ours_main = aes_ctr_numba(KEY, CLEARTEXT, 1)
 
     if ct_pyaes_main == ct_ours_main:
         print("\u2713 NumPy+Numba matches pyaes exactly with counter=1")
