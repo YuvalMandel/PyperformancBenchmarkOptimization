@@ -1,16 +1,4 @@
 #!/usr/bin/env python3
-"""
-AES-128 CTR — Correct FIPS-197 AES implemented without external crypto libs.
-NumPy + Numba JIT + parallel block processing.
-
-Deps:
-    pip install numpy numba pyperf
-
-Usage:
-    python aes_numba_ctr.py
-"""
-
-import math
 import numpy as np
 import pyperf
 from numba import njit, prange, uint8, int64
@@ -178,7 +166,7 @@ def _aes_encrypt_block_128(block16, round_keys):
     st = _add_round_key(st, round_keys[10])
     return _state_to_bytes_colmajor(st)
 
-@njit(cache=True) # parallel=True,
+@njit(cache=True)
 def _ctr_xor_all(data_view, out_view, initial_counter, round_keys):
     nbytes = data_view.size
     nblocks = (nbytes + 15) // 16
@@ -204,7 +192,7 @@ def _ctr_xor_all(data_view, out_view, initial_counter, round_keys):
             out_view[j] = data_view[j] ^ ks[k]
             k += 1
 
-def aes_ctr_numba_parallel(key: bytes, data: bytes, initial_counter: int = 0) -> bytes:
+def aes_ctr_numba(key: bytes, data: bytes, initial_counter: int = 0) -> bytes:
     """Public wrapper: AES-128 CTR encryption/decryption (same op)."""
     if len(key) != 16:
         raise ValueError("AES-128 requires a 16-byte key")
@@ -222,12 +210,12 @@ def aes_ctr_numba_parallel(key: bytes, data: bytes, initial_counter: int = 0) ->
 # ---------------------------------------------------------------------------
 def bench_aes_ctr_numba(loops: int):
     # warm-up (ensure JIT compiled) - single-block and small run
-    _ = aes_ctr_numba_parallel(KEY, CLEARTEXT[:16], 0)
+    _ = aes_ctr_numba(KEY, CLEARTEXT[:16], 0)
 
     t0 = pyperf.perf_counter()
     for _ in range(loops):
-        ct = aes_ctr_numba_parallel(KEY, CLEARTEXT, 0)
-        pt = aes_ctr_numba_parallel(KEY, ct, 0)
+        ct = aes_ctr_numba(KEY, CLEARTEXT, 0)
+        pt = aes_ctr_numba(KEY, ct, 0)
     dt = pyperf.perf_counter() - t0
 
     if pt != CLEARTEXT:
@@ -238,6 +226,6 @@ if __name__ == "__main__":
     # Clean performance benchmark without any prints or comparisons
     runner = pyperf.Runner()
     runner.metadata['description'] = (
-        "Correct AES-128 CTR using NumPy buffers + Numba JIT + parallel blocks"
+        "Correct AES-128 CTR using NumPy buffers + Numba JIT"
     )
     runner.bench_time_func("crypto_aes_numba_ctr", bench_aes_ctr_numba)
