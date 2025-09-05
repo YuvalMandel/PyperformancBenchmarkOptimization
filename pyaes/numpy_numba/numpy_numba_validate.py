@@ -46,7 +46,7 @@ def validate_aes_implementation():
         raise RuntimeError("pyaes decryption of main script data failed")
     print("\u2713 pyaes self-decryption passed")
 
-    print("\ud83c\udf89 Validation complete.")
+    print("Validation complete.")
 
 
 if __name__ == "__main__":
