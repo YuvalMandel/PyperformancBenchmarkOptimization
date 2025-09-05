@@ -1,6 +1,12 @@
 #!/usr/bin/env python3
+"""
+Comparison script between optimized AESNI CTR wrapper and pyaes implementations.
+"""
+
 import sys, pathlib
 sys.path.insert(0, str(pathlib.Path(__file__).parent.resolve()))
+
+import pyaes
 from c_aesni_wrapper import AESModeOfOperationCTR, Counter
 
 # Test data
