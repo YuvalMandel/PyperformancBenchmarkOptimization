@@ -30,10 +30,7 @@ def main():
         raise RuntimeError("Encryption/decryption failed!")
 
 if __name__ == "__main__":
-    for i in range(1000):
-        main()
-        if (i + 1) % 100 == 0:
-            print("-", end="", flush=True)
+    main()
     print()
 
 
