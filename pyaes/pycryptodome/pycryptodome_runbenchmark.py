@@ -47,6 +47,6 @@ def bench_pycryptodome_parallel(loops):
 if __name__ == "__main__":
     runner = pyperf.Runner()
     runner.metadata['description'] = "Sequential AES (CTR mode) using pycryptodome"
-    runner.bench_time_func('crypto_pycryptodome_sequential_2', bench_pycryptodome_parallel)
+    runner.bench_time_func('crypto_pycryptodome_sequential', bench_pycryptodome_parallel)
 
 

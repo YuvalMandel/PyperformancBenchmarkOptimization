@@ -29,13 +29,5 @@ def main():
         raise RuntimeError("Encryption/decryption failed!")
 
 if __name__ == "__main__":
-    # Run 1000 times for detailed profiling
-    for i in range(1000):
-        main()
-        
-        # Print dash every 100 calls
-        if (i + 1) % 100 == 0:
-            print("-", end="", flush=True)
-    
-    # New line at the end
+    main()
     print()
