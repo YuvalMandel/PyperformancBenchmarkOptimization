@@ -47,8 +47,6 @@ numpy_numba_runtime=$(python3-dbg pyaes/numpy_numba/numpy_numba_runbenchmark.py 
   }')
 echo "numpy_numba runtime: ${numpy_numba_runtime} us"
 
-# Build C and cython libraries
-echo "Building C and cython modules"
 cd pyaes/c_aesni
 python3-dbg c_aesni_validate.py
 c_aesni_runtime=$(python3-dbg c_aesni_runbenchmark.py \
