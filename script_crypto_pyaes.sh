@@ -18,6 +18,8 @@ sudo apt-mark unhold libexpat1 zlib1g
 sudo apt-get -y --fix-broken install
 sudo apt-get install -y python3-dev build-essential  # or python3.10-dev
 python3 -m pip install -U packaging
+git clone https://github.com/brendangregg/FlameGraph.git
+export PATH="$PATH:$(pwd)/FlameGraph"
 # Build C and cython libraries
 echo "Building C and cython modules"
 cd pyaes/c_aesni
@@ -63,5 +65,7 @@ py-spy record -o pyaes_profile.speedscope --format speedscope --rate 300 python3
 py-spy record -o pycryptodome_profile.speedscope --format speedscope --rate 10000 python3-dbg pyaes/pycryptodome/pycryptodome_flamegraph_profile.py
 py-spy record -o numpy_numba_profile.speedscope --format speedscope --rate 300 python3-dbg pyaes/numpy_numba/numpy_numba_flamegraph_profile.py
 cd pyaes/c_aesni
-
+perf record -F 99 -g --call-graph dwarf -- python3-dbg c_aesni_flamegraph.py
+perf script -i perf.data | stackcollapse-perf.pl > c_aesni.folded
+flamegraph.pl c_aesni.folded > ../../c_aesni.svg
 cd ../../
