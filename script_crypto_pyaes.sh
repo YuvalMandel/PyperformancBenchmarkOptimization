@@ -18,7 +18,12 @@ sudo apt-mark unhold libexpat1 zlib1g
 sudo apt-get -y --fix-broken install
 sudo apt-get install -y python3-dev build-essential  # or python3.10-dev
 python3 -m pip install -U packaging
-
+# Build C and cython libraries
+echo "Building C and cython modules"
+cd pyaes/c_aesni
+rm -rf build
+python3-dbg c_aesni_setup.py build_ext --inplace
+cd ../../
 # Benchmark execution using pyperformance and validating correctness
 echo "Running benchmarks"
 original_runtime=$(python3-dbg pyaes/original/run_benchmark.py \
@@ -45,8 +50,6 @@ echo "numpy_numba runtime: ${numpy_numba_runtime} us"
 # Build C and cython libraries
 echo "Building C and cython modules"
 cd pyaes/c_aesni
-rm -rf build
-python3-dbg c_aesni_setup.py build_ext --inplace
 python3-dbg c_aesni_validate.py
 c_aesni_runtime=$(python3-dbg c_aesni_runbenchmark.py \
   | awk '/Mean/ {
@@ -57,6 +60,7 @@ echo "c_aesni runtime: ${c_aesni_runtime} us"
 cd ../../
 
 # Flame graph and performance data generation.
+echo "Creating speedscope and flamegraphs"
 py-spy record -o pyaes_profile.speedscope --format speedscope --rate 300 python3-dbg pyaes/original/pyaes_flamegraph_profile.py
 py-spy record -o pycryptodome_profile.speedscope --format speedscope --rate 10000 python3-dbg pyaes/pycryptodome/pycryptodome_flamegraph_profile.py
 py-spy record -o numpy_numba_profile.speedscope --format speedscope --rate 300 python3-dbg pyaes/numpy_numba/numpy_numba_flamegraph_profile.py
