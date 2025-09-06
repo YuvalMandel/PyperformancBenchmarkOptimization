@@ -20,11 +20,16 @@ sudo apt-get install -y python3-dev build-essential  # or python3.10-dev
 python3 -m pip install -U packaging
 git clone https://github.com/brendangregg/FlameGraph.git
 export PATH="$PATH:$(pwd)/FlameGraph"
+python3-dbg -m pip install --user cython
 # Build C and cython libraries
 echo "Building C and cython modules"
 cd pyaes/c_aesni
 rm -rf build
 python3-dbg c_aesni_setup.py build_ext --inplace
+cd ../../
+cd pyaes/cython_aesni/
+rm -rf build
+python3-dbg cython_aesni_setup.py build_ext --inplace
 cd ../../
 # Benchmark execution using pyperformance and validating correctness
 echo "Running benchmarks"
@@ -58,6 +63,33 @@ c_aesni_runtime=$(python3-dbg c_aesni_runbenchmark.py \
   }')
 echo "c_aesni runtime: ${c_aesni_runtime} us"
 cd ../../
+python3-dbg pyaes/cython_aesni/cython_aesni_validate.py
+cython_aesni_runtime=$(python3-dbg pyaes/cython_aesni/cython_aesni_runbenchmark.py \
+  | awk '/Mean/ {
+      if ($7 == "ms") {print $6 * 1000}
+      else if ($7 == "us") {print $6}
+  }')
+echo "cython_aesni runtime: ${cython_aesni_runtime} us"
+
+# Table header
+printf "%-15s %-12s %-8s\n" "Name" "Runtime(us)" "Speedup"
+printf "%-15s %-12s %-8s\n" "---------------" "-----------" "-------"
+# Print base row
+printf "%-15s %-12d %-8s\n" "pyaes" $original_runtime "1.00x"
+# Function to compute speedup (faster = >1x)
+print_row() {
+    local name=$1
+    local runtime=$2
+    # speedup = base / runtime
+    local speedup=$(awk -v b=$original_runtime -v r=$runtime 'BEGIN {printf "%.2fx", b/r}')
+    # Use %s for the speedup string
+    printf "%-15s %-12d %-8s\n" "$name" $runtime "$speedup"
+}
+# Print other implementations
+print_row "pycryptodome" $pycryptodome_runtime
+print_row "numpy_numba"  $numpy_numba_runtime
+print_row "c_aesni"      $c_aesni_runtime
+print_row "cython_aesni" $cython_aesni_runtime
 
 # Flame graph and performance data generation.
 echo "Creating speedscope and flamegraphs"
@@ -65,7 +97,10 @@ py-spy record -o pyaes_profile.speedscope --format speedscope --rate 300 python3
 py-spy record -o pycryptodome_profile.speedscope --format speedscope --rate 10000 python3-dbg pyaes/pycryptodome/pycryptodome_flamegraph_profile.py
 py-spy record -o numpy_numba_profile.speedscope --format speedscope --rate 300 python3-dbg pyaes/numpy_numba/numpy_numba_flamegraph_profile.py
 cd pyaes/c_aesni
-perf record -F 99 -g --call-graph dwarf -- python3-dbg c_aesni_flamegraph.py
+perf record -F 10000 -g --call-graph dwarf -- python3-dbg c_aesni_flamegraph_profile.py
 perf script -i perf.data | stackcollapse-perf.pl > c_aesni.folded
 flamegraph.pl c_aesni.folded > ../../c_aesni.svg
 cd ../../
+perf record -F 10000 -g --call-graph dwarf -- python3-dbg pyaes/cython_aesni/cython_aesni_flamegraph_profile.py
+perf script -i perf.data | stackcollapse-perf.pl > cython_aesni.folded
+flamegraph.pl cython_aesni.folded > cython_aesni.svg
