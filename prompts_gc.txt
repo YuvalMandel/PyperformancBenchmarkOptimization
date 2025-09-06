@@ -1,0 +1,57 @@
+During work we used :cursor chatgpt and gemini, asking for sources and double-checking when relvant. 
+
+can you allaborate about writing c extensions in c vs cython, focusing on the bindings and the c-api aspects?
+how often can you use __slots__ in python and it will not harm functionality , are there studies about this?
+what happens between python and cython ?
+i would like to run perf and create flamegraphs using this sitehttps://www.brendangregg.com/FlameGraphs/cpuflamegraphs.html#Instructions
+create a bash script i can just run with the parameters being the file and sample rate
+lets say i ran perf and i only want the script to take the perf.data file and create a flamegraph
+i got this[ ] Generating folded stacks from perf.data..../generate_flamegraph.sh: line 26: /root/FlameGraph/stackcollapse-perf.pl: No such file or directory*
+can i have something that shows me progress?
+how long should it take to run this on a 350 mb perf.data file ?
+save perf report into file
+im trying to create a report and cannots
+tryed to install and got this
+did that and still get
+i get Error: unknown option `no-kernel'*
+what does asizeof from pympler measureso wait, if i have a linked list, the first node that refernces the second will show the combined size of all nodes?
+create a base for a run.sh script and instruct me on how to fill up the gaps
+incorparate the flamegraph creation into this script
+edit the script to reflect the following for the gc_collect.py the output will be in ms for the gc_collect_opt the output will be in us adjust accordingly
+make the same change, ie capturing the runtime from the run, for gc_collect_opt as well
+ok everything ran fairly well, there is one problem the benchmark run time will not show up in the gc_report.txt , it only shows up on screen right after a run of the gc_collect.py , including runs with perf recordthe runtime needs to be captured right after a runthe runs are short enough, you can run it with just python3-dbg gc_collect.py right when you capture the data
+i got this instead of what i need why? fix it
+python3-dbg -m pyperf systTune the system configuration to run benchmarks
+is there a site online to which i can upload my perf.data and get a flamegraph
+my perf.data file is too big how can i get a smaller file to work with ?
+give me the most simple commands to create a flamegraph from a perf.data
+show me in text format the prompts i used during this chat
+write me a pyinstruments command to run a pyperformence benchmark with a sample interval of 0.0001
+i cant run the spesific one
+i want to get the html from pyinstruments
+im trying to use this script but i cant seem to see the whole folder on the site
+become familiar with the numba library and profila profiling toolhow can i get the most detail from the profila
+explain using Intel VTune Profiler
+vtune -collect hotspots -- python3-dbg numbaaes.pyvtune: Error: Option 'pmu-type' received value from the next argument
+vtune -collect=hotspots -result-dir=vtune_res -- python3 numbaaes.py vtune -report=summary -result-dir=vtune_result-dir=vtune_res -- python3 numbaaes.py vtune: Error: Option 'pmu-type' received value from the next argumentThis document contains a consolidated list of your prompts from the 
+Is it possible to create a gc_collect implamentation that is cache aware and includes prefetch?
+What are all the files of gc collect with prefetch? I need a simple prefetch were pre-running I choose the prefetch size
+Take cache_aware_nodes.py, and write it in a new file witrh a simple prefetch like in cache_aware_gc_collect.py
+Don't do any special printing, just regualr pyperf
+Look at cache_aware_nodes. I want to look inside the python interpeter and see if I can optimize it further
+For cache_aware_node_list_gc_collect.py, add a prefetch option based on the cache sizes. What is the optimal size?
+give me a manual on adding python to the path
+can i write a Concurrent Mark-Sweep for python in c ?
+can i usr jython to use cms and make my gc.collect faster?
+create a full working cms_collector.c
+what is checked in gc traversal in pyperformance?
+what is the output of gc_collect?
+can i in python tell the cpu which of the if options is more likly ?
+i want to use perf to profile a spesific section of code, whats the easyiest way?
+so leys say i have a file named myfile.py and i want to record only the function benchamark_collection from start to return
+write a manual
+thats actually super unhelpful thank you
+is Cpython garbage collector copying?
+explain further about boxing and unboxing
+cms gc collect does it need spesialized hardware?
+explain the benefits and cons of adding instructions

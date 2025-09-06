@@ -4,7 +4,7 @@ Final Project of the Technion course 00460882 — Improving the performance of t
 
 This subfolder contains self-contained scripts to validate, benchmark, and profile multiple AES implementations (original PyAES, NumPy/Numba, PyCryptodome, C AES-NI, and Cython AES-NI)
 
-It also has the GC collect baseline and improvements.
+It also has the GC collect baseline and optimized.
 
 ## Structure 🗂️
 - `pyaes/` 
@@ -21,7 +21,8 @@ It also has the GC collect baseline and improvements.
 - `gc_collect/` 🗑️
   - `gc_collect.py`, `gc_collect_opt.py`, `gc_profiler.py`, `gc_opt_profiler.py`
 - `script_crypto_pyaes.sh`, `script_gc_collect.sh`: automated run scripts
-- `prompts.txt`: prompt log
+- `prompts_aes.txt`: AES prompt log
+- `prompts_gc.txt`: GC prompt log
 
 ## Setup 🔧
 Make shell scripts executable

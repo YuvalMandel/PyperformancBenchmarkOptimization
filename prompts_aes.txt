@@ -1,21 +1,17 @@
-change c_aesni_flamegraph_profile.py to fir within the names of the folder
-make a txt file of all the questions I asked you
-Look at all conversion I had with cursor before that as well
+During work we used :cursor chatgpt and gemini, asking for sources and double-checking when relvant. 
+
+How does the CPU tell the module to start? how does he knows when to come to read data?
+Give sources for each accelerator
+Does pyAES not have Pre-expanded Round Keys?
+Does pyaes not have Optimized Counter Generation like numpy? with shifts?
+Does pyaes not have Minimal Memory Allocations?
 For the parallel numpy implemantion of AES , is there a script that make sure the resulrs are the same?
-Expailn each change you added from pyaes to parallel_numpy_crypto to make it run faster
+Expand on Optimized Bit Operations
 Can you exapnd on how numpy implements the vectorized operation in section 3?
 PyAES does not use Pre-computed Lookup Tables in section 4?
 pyAEs doesn't use column major? can you show me in the code?
 where in pyaes is it row major?
-Doe pyAES not have Pre-expanded Round Keys?
-Does pyaes not have Optimized Counter Generation like numpy? with shifts?
-Does pyaes not have Minimal Memory Allocations?
 With all this information, rewrite your answer to "Expailn each change you added from pyaes to parallel_numpy_crypto to make it run faster"
-Expand on Optimized Bit Operations
-Where in pyaes is it not optimized? show them side by side and point to the lines where it happened
-What are all the files of gc collect with prefetch? I need a simple prefetch were pre-running I choose the prefetch size
-Take cache_aware_nodes.py, and write it in a new file witrh a simple prefetch like in cache_aware_gc_collect.py
-Don't do any special printing, just regualr pyperf
 I want you to take the 5 implemations: pyaes, numpy, aesni python wrapper, aesni c optimized and cython4, and in a markdown file write in a table where the rows are different parts of the AES algorithem (xor, round keys, sbox, stc), how each implemetions does it. If It happens in an outside library in some implematins, just mentioned the outside library and the function it happens within.
 In an extra column, I want you to copy the actual code from the implemation. If it does mot exist (came from external lib), mention where I can find it. Write it in the exact way. mention which lines in the original files are relevant.
 For the PyperformanceBenchmarkOptimization/pyaes/pycryptdome/ create a bash file that:
@@ -24,23 +20,16 @@ For the PyperformanceBenchmarkOptimization/pyaes/pycryptdome/ create a bash file
 - generates flame graphs and performance data
 - runs post-optimization benchmarks and compares performance
 Which files uses the AESNI.c file? are there any?
-can we access the function collect in the gc.pyi file?
-I want to see it's implemation
-In aes.py, explin what line 214 does step by step
+can we access the function collect in the gc.pyi file?I want to see it's implemation
+In aes.py, explain what line 214 does step by step
 Perfect, what about lines 217-224?
 What does T1 do for example? what part of the AES algorithm is made in each step?
-Where does the ket expantion occurs?
-Write me a short summary for aes 129 algorithem and the functions it implements. do shift rows, mix columns and more needed functions.
-Why is ThreadPoolExecutor needed for pycryptodome?
-How do I rewrite the code to do that?
-Do it sequental, no threadpool
+Where does the key expantion occurs?
+Write me a short summary for aes 128 algorithem and the functions it implements. do shift rows, mix columns and more needed functions.
 revert back and call this cryptodome_2 in new file. make a validation dile as well. make a 1000 runs profile for flamegraph as well
 make version one the old parallel one, and version 2 the sequental
 I want pycrytodome validate inside the folder PyperformanceBenchmarkOptimization to be like comapre_aesni_pyaes.py but with the cryptodome implemention tested
 I need it to compare to the enc/dec results pf pyaes, make sure they are the same
-Look at cache_aware_nodes. I want to look inside the python interpeter and see if I can optimize it further
-For cache_aware_node_list_gc_collect.py, add a prefetch option based on the cache sizes. What is the optimal size?
-The extra prints were not resolve go back
 I wann use option 2: "Option 2: C Extensions with AES-NI" — how do I do that?
 First, use python3 and not python. The issue was with cython implemantion, please use how it was solved there
 python3 did not solve it. please check how it was done in the setup files for cython in here
@@ -52,20 +41,11 @@ where is the MMIO in all of this?
 Except AESNI, is there an AES accelerator concept that one can use? maybe something a paper?
 Make a table and tell how the interface for each accelerator works with the CPU. Ass AESNI
 Where does the processing occure in IMCRYPTO
-How does the CPU tell the module to start? how does he knows when to come to read data?
-Give sources for each accelerator
 What is the pyaes counter size? and what is the AESNI counter size? bring sources
-In numpy and cython, what is memory view?
 Right now cython wins by a lot in performance, what could be the reasons given does 2 codes?
 how can I view the C code cython makes?
+In numpy and cython, what is memory view?
 what hardware events we can see in perf could explain the difference? is there a way to see function calls?
 I have python code that uses c files I made, I wanted to benchmark the code with flamegraph, but the names of functions are unclear. How can I improve it?
-What if we do a pure c implementation of the python part, just to see the flamegraph better?
-How does this makes sense with a single core? "root@ubuntu:~/pyperformance/benchmarks/bm_gc_collect# lscpu
-Architecture:                x86_64
-  CPU op-mode(s):            32-bit, 64-bit
-  Address sizes:             46 bits physical, 48 bits virtual
-  Byte Order:                Little Endian
-CPU(s):                      1
-  On-line CPU(s) list:       0
-Vendor ID:   
+Why is ThreadPoolExecutor needed for pycryptodome?
+Do it sequental, no threadpool
